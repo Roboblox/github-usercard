@@ -3,7 +3,24 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+axios
+  .get("https://api.github.com/users/roboblox")
+  .then((response) => {
+    let myCard = cardMaker(response.data);
+    document.querySelector(".cards").appendChild(myCard);
+    console.log(
+      "the response from the API, organized for us by axios",
+      response.data
+    );
+  })
+  .catch((error) => {
+    console.log(
+      "something went wrong, hopefully the error tells us what",
+      error
+    );
+  });
 
+// githubData();
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +45,32 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "https://api.github.com/users/tetondan",
+  "https://api.github.com/users/dustinmyers",
+  "https://api.github.com/users/justsml",
+  "https://api.github.com/users/luishrd",
+  "https://api.github.com/users/bigknell",
+];
+followersArray.forEach((element) => {
+  axios
+    .get(element)
+    .then((response) => {
+      followersCards = cardMaker(response.data);
+
+      document.querySelector(".cards").appendChild(followersCards);
+      console.log(
+        "the response from the API, organized for us by axios",
+        response.data
+      );
+    })
+    .catch((error) => {
+      console.log(
+        "something went wrong, hopefully the error tells us what",
+        error
+      );
+    });
+});
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +91,46 @@ const followersArray = [];
       </div>
     </div>
 */
+function cardMaker(object) {
+  const card = document.createElement("div");
+  const image = document.createElement("img");
+  const cardInfo = document.createElement("div");
+  const name = document.createElement("h3");
+  const userName = document.createElement("p");
+  const location = document.createElement("p");
+  const profile = document.createElement("p");
+  const address = document.createElement("a");
+  const followers = document.createElement("p");
+  const following = document.createElement("p");
+  const bio = document.createElement("p");
+
+  card.classList.add("card");
+  cardInfo.classList.add("card-info");
+  name.classList.add("name");
+  userName.classList.add("userName");
+  location.classList.add("location");
+  profile.classList.add("profile");
+  address.classList.add("address");
+  followers.classList.add("followers");
+  following.classList.add("following");
+  bio.classList.add("bio");
+
+  name.textContent = object.name;
+  image.src = object.avatar_url;
+  userName.textContent = object.login;
+  location.textContent = object.location;
+  profile.textContent = object.profile;
+  address.textContent = object.address;
+  followers.textContent = object.followers;
+  following.textContent = object.following;
+  bio.textContent = object.bio;
+
+  card.append(image, cardInfo);
+  cardInfo.append(name, userName, location, profile, followers, following, bio);
+  profile.append(address);
+
+  return card;
+}
 
 /*
   List of LS Instructors Github username's:
